@@ -6,5 +6,5 @@ export interface Aluno {
     nota_2:      number | null;
     nota_3:      number | null;
     nota_4:      number | null;
-    faltas:     number | null;
+    faltas:     number;
 }
