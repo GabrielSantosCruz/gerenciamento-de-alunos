@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { AlunoComStatus } from "./api/model/StatusAluno";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import * as React from 'react';
+import Divider from '@mui/material/Divider';
 
 export default function Home() {
   const [alunos, setAlunos] = useState<AlunoComStatus[] | null>(null);
@@ -23,6 +24,7 @@ export default function Home() {
           <React.Fragment key={aluno.id}>
             <div className="text-sm">{aluno.primeiro_nome}</div>
             <div className="text-sm">{aluno.media}</div>
+            <Divider/>
           </React.Fragment>
         ))}
       </ScrollArea>
