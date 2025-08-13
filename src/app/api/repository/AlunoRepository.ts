@@ -3,7 +3,7 @@ import path from 'path';
 import { Aluno } from '../model/Aluno';
 
 export function getAlunosFromJSON(): Aluno[] {
-    const filePath = path.join(process.cwd(), '../../public/alunos.js')
+    const filePath = path.join(process.cwd(), 'src', 'public', 'alunos.json')
 
     try {
         const fileContents = fs.readFileSync(filePath, 'utf-8');
@@ -15,5 +15,6 @@ export function getAlunosFromJSON(): Aluno[] {
         console.error('Erro ao ler arquivo JSON: ', error);
 
         return []
+
     }
 }
