@@ -1,9 +1,10 @@
 export interface Aluno {
     id:         number;
-    first_name: string;
-    last_name:  string;
-    nota1:      number | null;
-    nota2:      number | null;
-    nota3:      number | null;
+    primeiro_nome: string;
+    ultimo_nome:  string;
+    nota_1:      number | null;
+    nota_2:      number | null;
+    nota_3:      number | null;
+    nota_4:      number | null;
     faltas:     number | null;
 }
