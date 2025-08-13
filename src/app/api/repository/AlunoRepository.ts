@@ -12,9 +12,6 @@ export function getAlunosFromJSON(): Aluno[] {
         return alunos
         
     } catch (error) {
-        console.error('Erro ao ler arquivo JSON: ', error);
-
-        return []
-
+        throw new Error(`Erro ao ler arquivo JSON: ${error}`);
     }
 }
