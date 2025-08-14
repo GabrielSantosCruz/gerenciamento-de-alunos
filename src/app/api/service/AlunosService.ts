@@ -14,7 +14,7 @@ export function getAllAlunos(): Aluno[] {
 export function calcularMedia(aluno: Aluno): number {
     try {
         const notas = [aluno.nota_1, aluno.nota_2, aluno.nota_3, aluno.nota_4];
-        const notasTratadas = notas.map(nota => nota === null ? 0 : nota);
+        const notasTratadas = notas.map((nota) => nota === null ? 0 : nota);
         const notasValidas = notasTratadas.filter(nota => typeof nota === 'number') as number[]
 
         if (notasValidas.length === 0) return 0;

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { AlunosService } from './service/AlunoService';
+import { AlunosService } from './service/AlunosService';
 import { AlunoComStatus } from './model/StatusAluno';
 import { FiltroAlunos } from './model/Filtro';
 

@@ -26,7 +26,8 @@ export function AlunoCard({ aluno }: AlunoCardProps) {
                     {aluno.primeiro_nome} {aluno.ultimo_nome}
                 </h3>
                 <span className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${getStatusColor()}`}>
-                    {aluno.status}
+                    {`${aluno.status} `}
+                    {aluno.motivo}
                 </span>
             </div>
 
@@ -41,7 +42,6 @@ export function AlunoCard({ aluno }: AlunoCardProps) {
                 </div>
             </div>
             <Divider />
-
         </div>
     );
 }
