@@ -11,12 +11,12 @@ import { Label } from "@/components/ui/label";
 
 export default function Home() {
   const [alunos, setAlunos] = useState<AlunoComStatus[] | null>(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("todos");
-  const [filterType, setFilterType] = useState<"nome" | "media" | "faltas">("nome");
-  const [filtroMedia, setfiltroMedia] = useState("");
-  const [mediaComparator, setMediaComparator] = useState<">" | "<" | "=">(">");
-  const [faltasFilter, setFaltasFilter] = useState("");
+  const [termoBusca, setTermoBusca] = useState("");
+  const [filtroStatus, setFiltroStatus] = useState("todos");
+  const [tipoFiltro, setTipoFiltro] = useState<"nome" | "media" | "faltas">("nome");
+  const [filtroMedia, setFiltroMedia] = useState("");
+  const [comparadorMedia, setComparadorMedia] = useState<">" | "<" | "=">(">");
+  const [filtroFaltas, setFiltroFaltas] = useState("");
   const [faltasComparator, setFaltasComparator] = useState<">" | "<" | "=">(">");
 
   useEffect(() => {
@@ -34,53 +34,53 @@ export default function Home() {
   }, []);
 
   const alunosFiltrados = alunos?.filter(aluno => {
-    const matchesStatus = statusFilter === "todos" || 
-                         aluno.status.toLowerCase() === statusFilter.toLowerCase();
-    
-    if (filterType === "nome") {
-      const matchesSearch = aluno.primeiro_nome.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          aluno.ultimo_nome.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase());
-      return matchesStatus && matchesSearch;
+    const statusEncontrado = filtroStatus === "todos" ||
+      aluno.status.toLowerCase() === filtroStatus.toLowerCase();
+
+    if (tipoFiltro === "nome") {
+      const buscaEncontrada = aluno.primeiro_nome.toLowerCase().includes(termoBusca.toLowerCase()) ||
+        aluno.ultimo_nome.toLocaleLowerCase().includes(termoBusca.toLocaleLowerCase());
+      return statusEncontrado && buscaEncontrada;
     }
-    
-    if (filterType === "media") {
-      if (!filtroMedia) return matchesStatus;
-      const mediaValue = parseFloat(filtroMedia);
+
+    if (tipoFiltro === "media") {
+      if (!filtroMedia) return statusEncontrado;
+      const valorMedia = parseFloat(filtroMedia);
       const alunoMedia = aluno.media;
-      
-      switch (mediaComparator) {
-        case ">": return matchesStatus && alunoMedia > mediaValue;
-        case "<": return matchesStatus && alunoMedia < mediaValue;
-        case "=": return matchesStatus && alunoMedia === mediaValue;
-        default: return matchesStatus;
+
+      switch (comparadorMedia) {
+        case ">": return statusEncontrado && alunoMedia > valorMedia;
+        case "<": return statusEncontrado && alunoMedia < valorMedia;
+        case "=": return statusEncontrado && alunoMedia === valorMedia;
+        default: return statusEncontrado;
       }
     }
-    
-    if (filterType === "faltas") {
-      if (!faltasFilter) return matchesStatus;
-      const faltasValue = parseInt(faltasFilter);
+
+    if (tipoFiltro === "faltas") {
+      if (!filtroFaltas) return statusEncontrado;
+      const faltasValue = parseInt(filtroFaltas);
       const alunoFaltas = aluno.faltas;
-      
+
       switch (faltasComparator) {
-        case ">": return matchesStatus && alunoFaltas > faltasValue;
-        case "<": return matchesStatus && alunoFaltas < faltasValue;
-        case "=": return matchesStatus && alunoFaltas === faltasValue;
-        default: return matchesStatus;
+        case ">": return statusEncontrado && alunoFaltas > faltasValue;
+        case "<": return statusEncontrado && alunoFaltas < faltasValue;
+        case "=": return statusEncontrado && alunoFaltas === faltasValue;
+        default: return statusEncontrado;
       }
     }
-    
-    return matchesStatus;
+
+    return statusEncontrado;
   });
 
   return (
     <div className="min-h-screen p-5 bg-gray-50 flex flex-col items-center">
       <div className="w-full max-w-4xl space-y-6">
         <h1 className="text-3xl font-bold text-gray-800 text-center">Controle de Alunos</h1>
-        
-        <RadioGroup 
-          defaultValue="nome" 
+
+        <RadioGroup
+          defaultValue="nome"
           className="flex gap-4"
-          onValueChange={(value: "nome" | "media" | "faltas") => setFilterType(value)}
+          onValueChange={(value: "nome" | "media" | "faltas") => setTipoFiltro(value)}
         >
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="nome" id="r1" />
@@ -97,21 +97,21 @@ export default function Home() {
         </RadioGroup>
 
         <div className="flex flex-col gap-4">
-          {filterType === "nome" && (
+          {tipoFiltro === "nome" && (
             <Input
               placeholder="Buscar por nome"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              value={termoBusca}
+              onChange={(e) => setTermoBusca(e.target.value)}
             />
           )}
 
-          {filterType === "media" && (
+          {tipoFiltro === "media" && (
             <div className="flex gap-2">
-              <Select value={mediaComparator} onValueChange={(value: ">" | "<" | "=") => setMediaComparator(value)}>
+              <Select value={comparadorMedia} onValueChange={(value: ">" | "<" | "=") => setComparadorMedia(value)}>
                 <SelectTrigger className="w-[140px]">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="">
+                <SelectContent>
                   <SelectItem value=">">Maior que</SelectItem>
                   <SelectItem value="<">Menor que</SelectItem>
                   <SelectItem value="=">Igual a</SelectItem>
@@ -121,7 +121,7 @@ export default function Home() {
                 type="number"
                 placeholder="Valor da média"
                 value={filtroMedia}
-                onChange={(e) => setfiltroMedia(e.target.value)}
+                onChange={(e) => setFiltroMedia(e.target.value)}
                 step="0.1"
                 min="0"
                 max="10"
@@ -129,10 +129,10 @@ export default function Home() {
             </div>
           )}
 
-          {filterType === "faltas" && (
+          {tipoFiltro === "faltas" && (
             <div className="flex gap-2">
               <Select value={faltasComparator} onValueChange={(value: ">" | "<" | "=") => setFaltasComparator(value)}>
-                <SelectTrigger className="w-[70px]">
+                <SelectTrigger className="w-[140px]">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -144,14 +144,14 @@ export default function Home() {
               <Input
                 type="number"
                 placeholder="Número de faltas"
-                value={faltasFilter}
-                onChange={(e) => setFaltasFilter(e.target.value)}
+                value={filtroFaltas}
+                onChange={(e) => setFiltroFaltas(e.target.value)}
                 min="0"
               />
             </div>
           )}
 
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <Select value={filtroStatus} onValueChange={setFiltroStatus}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Filtrar por status" />
             </SelectTrigger>
@@ -163,7 +163,6 @@ export default function Home() {
           </Select>
         </div>
 
-        {/* Lista de Alunos */}
         <ScrollArea className="h-[calc(100vh-300px)] rounded-md border bg-white p-4 shadow-sm">
           {alunos === null ? (
             <div className="space-y-4">
